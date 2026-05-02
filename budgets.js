@@ -1,0 +1,16 @@
+const { authorize, json, methodAllowed, redactError, ynabRequest } = require("./_shared");
+
+exports.handler = async (event) => {
+  const methodError = methodAllowed(event, ["GET"]);
+  if (methodError) return methodError;
+
+  const authError = authorize(event);
+  if (authError) return authError;
+
+  try {
+    const payload = await ynabRequest("/budgets");
+    return json(200, payload);
+  } catch (error) {
+    return json(error.statusCode || 500, { error: redactError(error) });
+  }
+};
