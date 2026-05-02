@@ -1,0 +1,1 @@
+# ynab-netlify-bridge
